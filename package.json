@@ -1,0 +1,11 @@
+{
+  "name": "takeHomeAssignmentRI",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Chubbard022/takeHomeAssignmentRI.git",
+  "author": "Chubbard022 <chubbard022@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.2"
+  }
+}
