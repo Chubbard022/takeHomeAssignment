@@ -6,6 +6,6 @@
   "author": "Chubbard022 <chubbard022@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.2"
+    "xmlhttprequest": "^1.8.0"
   }
 }
