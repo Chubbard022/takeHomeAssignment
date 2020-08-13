@@ -2,24 +2,38 @@ let persistedData = {}
 
 const xhr = new XMLHttpRequest();
 
-xhr.onreadystatechange = function(){
+window.setInterval(xhr.onreadystatechange = function(){
     if(xhr.readyState === 4){
         if(xhr.status === 200){
-            console.log(xhr.responseText)
-            let responseText = xhr.responseText;
+            let responseXML = xhr.responseXML;
 
-            let parsedData = document.getElementById("parsedData")
 
-            let newNode = document.createElement("p")
-            let text = document.createTextNode("working")
-            newNode.appendChild(text)
-            parsedData.appendChild(newNode)
+            getData(responseXML)
+        
+            outputDOM()
         }
         if(xhr.status === 404){
             console.log("file not found")
         }
     }
+},10000)
+function getData(responseData){
+    //systemUnit and all of its child nodes needed
+    let systemUnit = responseData.getElementsByTagName("SystemUnit")[0]
+    persistedData["systemUnit"] = systemUnit
+
+    let peripherals = responseData.getElementsByTagName("Peripherals").item(0)
+    console.log(peripherals)
+
 }
+function outputDOM(){
+    let parsedData = document.getElementById("parsedData")
+    let newNode = document.createElement("p")
+    let text = document.createTextNode("working")
+    newNode.appendChild(text)
+    parsedData.appendChild(newNode)
+}
+
 
 xhr.open("get", 'status.xml', true);
 xhr.send();

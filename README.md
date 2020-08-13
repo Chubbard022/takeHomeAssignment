@@ -122,7 +122,33 @@ data = {
 
             }
         },
-        callDetails: {.....},
+        callDetails: {
+            item: 62,
+            bookingId 15909,
+            capabilities: {
+                FECC: {
+                    mode: On,
+                    NumberOfPresents: 0,
+                    NumberOfSources: 1,
+                    Source: {
+                        name: "n/a",
+                        options: "ptzf",
+                        sourceId: 1
+                    }
+                }, faredMessage: {
+                    mode: off
+                },
+                hold: true,
+                IxChannel: {
+                    status: Active
+                }, 
+                Presentation: true
+
+            },
+            Manufacturer: Tandberg,
+            MicrophonesMuted: False,
+            SoftwareID: "unknown (new?)"
+        },
         networkInfo: {
             macAddress: "80:E0:1D:F7:80:10",
             IPv4: {
