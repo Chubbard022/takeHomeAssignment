@@ -321,9 +321,9 @@
     <ActiveSpeaker>
       <CallId>1</CallId>
     </ActiveSpeaker>
-    <Call item="62" maxOccurrence="n">
+    <Call item="62" maxOccurrence="n">   
       <BookingId>15909</BookingId>
-      <Capabilities>
+      <Capabilities> ************************************************
         <FECC>
           <Mode>On</Mode>
           <NumberOfPresets>0</NumberOfPresets>
@@ -346,7 +346,7 @@
       <Manufacturer>Tandberg</Manufacturer>
       <MicrophonesMuted>False</MicrophonesMuted>
       <SoftwareID>unknown (new?)</SoftwareID>
-    </Call>
+    </Call>                              
     <DoNotDisturb>Active</DoNotDisturb>
     <Line item="1" maxOccurrence="n">
       <Mode>Private</Mode>
