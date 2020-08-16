@@ -1,22 +1,25 @@
-
-let persistedData = {}
-
 const xhr = new XMLHttpRequest();
 xhr.onreadystatechange = function(){
     if(xhr.readyState === 4){
         if(xhr.status === 200){
             let responseXML = xhr.responseXML;
-
+            
+            let collection = []
             //gather all of the data through helper functions
             window.setInterval(()=>{
-            handleSystemUnitData(responseXML)
-            handlecameraDetails(responseXML)
-            handleNetworkDetails(responseXML)
-            handleSystemTime(responseXML)
-            handleContactInfo(responseXML)
+            let persistedData = {}
+
+            handleSystemUnitData(responseXML,persistedData)
+            handlecameraDetails(responseXML,persistedData)
+            handleNetworkDetails(responseXML,persistedData)
+            handleSystemTime(responseXML,persistedData)
+            handleContactInfo(responseXML,persistedData)
             //output to DOM persisted data
-            outputDOM(persistedData)
+            collection.push(persistedData)
+            
+            outputDOM(collection)
             //console.log(persistedData)
+            return collection
             }
             ,5000)
         }
@@ -26,13 +29,13 @@ xhr.onreadystatechange = function(){
     }
 }
 
-function handleSystemUnitData(responseData){
+function handleSystemUnitData(responseData,persistedData){
     //systemUnit and all of its child nodes needed
     let systemUnit = responseData.getElementsByTagName("SystemUnit")[0]
-    persistedData["systemUnit"] = systemUnit    
+    return persistedData["systemUnit"] = systemUnit    
 }
 
-function handlecameraDetails(responseData){
+function handlecameraDetails(responseData,persistedData){
     let cameraDetails = []
 
     let peripherals = responseData.getElementsByTagName("Peripherals")
@@ -70,9 +73,9 @@ function handlecameraDetails(responseData){
                 }
             } 
     })
-    persistedData["camera"] = cameraDetails
+    return persistedData["camera"] = cameraDetails
 }
-function handleNetworkDetails(responseData){
+function handleNetworkDetails(responseData,persistedData){
     let networkDetails = []
     let network = responseData.getElementsByTagName("Network")
     for(let item of network){
@@ -93,15 +96,15 @@ function handleNetworkDetails(responseData){
             }
         }
     }
-    persistedData["network"] = networkDetails;
+    return persistedData["network"] = networkDetails;
 }
 
-function handleSystemTime(responseData){
+function handleSystemTime(responseData,persistedData){
     let systemTime = responseData.getElementsByTagName("SystemTime")
-    persistedData["systemTime"] = systemTime[0].innerHTML;
+   return persistedData["systemTime"] = systemTime[0].innerHTML;
 }
 
-function handleContactInfo(responseData){
+function handleContactInfo(responseData,persistedData){
     let contactInfoData = {
         number: []
     };
@@ -113,17 +116,25 @@ function handleContactInfo(responseData){
             contactInfoData[info.tagName] = info.innerHTML
         }
     }
-    persistedData["contactInfo"] = contactInfoData;
+    return persistedData["contactInfo"] = contactInfoData;
 }
 
-function outputDOM(persistedData){
-    collection.push(persistedData)
-    console.log(collection)
+function handleCapabilities(responseData,persistedData){
+    //go through data
+    //if capabilities are not in camera, add to list,
+    //push into persistedData as outLires
+}
+
+function outputDOM(){
+    //for every time put success message on for five seconds
     let parsedData = document.getElementById("parsedData")
     let newNode = document.createElement("p")
-    let text = document.createTextNode("working")
+    let text = document.createTextNode("collected data successful")
     newNode.appendChild(text)
     parsedData.appendChild(newNode)
+    window.setInterval(()=>{
+        newNode.remove()
+    },3000)
 }
 
 

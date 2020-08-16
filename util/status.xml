@@ -323,7 +323,7 @@
     </ActiveSpeaker>
     <Call item="62" maxOccurrence="n">   
       <BookingId>15909</BookingId>
-      <Capabilities> ************************************************
+      <Capabilities> 
         <FECC>
           <Mode>On</Mode>
           <NumberOfPresets>0</NumberOfPresets>
