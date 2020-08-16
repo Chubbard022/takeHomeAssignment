@@ -23,7 +23,7 @@
 data = {
     1: {
         systemUnit: {
-            hardware: {
+            hardware: {eaeeaf
                 "moduleSerialNumber": FTT192501W7,
                 Monitoring: {
                     fan: {
@@ -117,9 +117,9 @@ data = {
                     softwareInfo: "MT8.0.1.1e47efe",
                     status: "connected",
                     type: "SpeakerTracker",
-                    upgradeStatus: "None"
-                }
-
+                    upgradeStatus: "None"s
+                },
+                Capabilities: {.....},
             }
         },
         callDetails: {
@@ -161,7 +161,6 @@ data = {
                 gateway: ""
             }
         },
-        Capabilities: {.....},
         systemTime: "2016-03-10T16:56:31Z",
         contactInfo: {
             contactMethod: {

@@ -2,28 +2,29 @@
 let persistedData = {}
 
 const xhr = new XMLHttpRequest();
-
-window.setInterval(xhr.onreadystatechange = function(){
+xhr.onreadystatechange = function(){
     if(xhr.readyState === 4){
         if(xhr.status === 200){
             let responseXML = xhr.responseXML;
 
             //gather all of the data through helper functions
+            window.setInterval(()=>{
             handleSystemUnitData(responseXML)
             handlecameraDetails(responseXML)
             handleNetworkDetails(responseXML)
-            handleCapabilities(responseXML)
             handleSystemTime(responseXML)
             handleContactInfo(responseXML)
-
             //output to DOM persisted data
-            outputDOM()
+            outputDOM(persistedData)
+            //console.log(persistedData)
+            }
+            ,5000)
         }
         if(xhr.status === 404){
             console.log("file not found")
         }
     }
-},60000)
+}
 
 function handleSystemUnitData(responseData){
     //systemUnit and all of its child nodes needed
@@ -37,13 +38,13 @@ function handlecameraDetails(responseData){
     let peripherals = responseData.getElementsByTagName("Peripherals")
                         .item(0).getElementsByTagName("ConnectedDevice")
     let connectedWithCamera = [
-        {1:peripherals[1].children},
-        {1:peripherals[2].children}
+        {0:peripherals[1].children},
+        {0:peripherals[2].children}
     ]
     //grabbing details about camera and pushing to cameraDetails array.
     for(let i=0; i<connectedWithCamera.length; i++){
         let temp = {}
-        for(let item of connectedWithCamera[i][1]){
+        for(let item of connectedWithCamera[i][0]){
             temp[item.tagName] = item.innerHTML
         }
         cameraDetails.push(temp)
@@ -56,9 +57,13 @@ function handlecameraDetails(responseData){
         let cameraID = camera.ID;
             for(let item of cameras){
                 if( cameraID == item.getElementsByTagName("MacAddress")[0].textContent){
-                    let temp = {}
+                    let temp = {
+                        capabilities: []
+                    }
                     for(let cameraDetail of item.children){
-                        temp[cameraDetail.tagName] = cameraDetail.innerHTML
+                        if(cameraDetail.tagName == "Capabilities"){
+                            temp.capabilities.push(cameraDetail.children[0].innerHTML)
+                        }else temp[cameraDetail.tagName] = cameraDetail.innerHTML
                     }
                     cameraDetails[index] = Object.assign({},camera,temp)
                     temp={}
@@ -91,19 +96,29 @@ function handleNetworkDetails(responseData){
     persistedData["network"] = networkDetails;
 }
 
-function handleCapabilities(responseData){
-
-}
-
 function handleSystemTime(responseData){
-
+    let systemTime = responseData.getElementsByTagName("SystemTime")
+    persistedData["systemTime"] = systemTime[0].innerHTML;
 }
 
 function handleContactInfo(responseData){
-
+    let contactInfoData = {
+        number: []
+    };
+    let contactInfo = responseData.getElementsByTagName("ContactInfo")[0].children
+    for(let info of contactInfo){
+        if(info.tagName == "ContactMethod"){
+            contactInfoData.number.push(info.children[0].innerHTML)
+        }else{
+            contactInfoData[info.tagName] = info.innerHTML
+        }
+    }
+    persistedData["contactInfo"] = contactInfoData;
 }
 
-function outputDOM(){
+function outputDOM(persistedData){
+    collection.push(persistedData)
+    console.log(collection)
     let parsedData = document.getElementById("parsedData")
     let newNode = document.createElement("p")
     let text = document.createTextNode("working")
