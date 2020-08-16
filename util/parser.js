@@ -16,12 +16,12 @@ xhr.onreadystatechange = function(){
             handleContactInfo(responseXML,persistedData)
             //output to DOM persisted data
             collection.push(persistedData)
-            
+            console.log(collection)
             outputDOM(collection)
             //console.log(persistedData)
             return collection
             }
-            ,5000)
+            ,6000)
         }
         if(xhr.status === 404){
             console.log("file not found")
@@ -30,8 +30,70 @@ xhr.onreadystatechange = function(){
 }
 
 function handleSystemUnitData(responseData,persistedData){
-    //systemUnit and all of its child nodes needed
+    let systemUnitData = {};
     let systemUnit = responseData.getElementsByTagName("SystemUnit")[0]
+    console.log(systemUnit)
+    for(let items of systemUnit.children){
+        switch(items.tagName){
+            case "Hardware":
+                console.log("Hardware",items.children) // ******************
+                for(let innerElm of items.children){
+                    console.log("Hardware",innerElm.innerHTML)
+                }
+               //console.log("Hardware",items.children.tagName, items.children.innerHTML)
+                break;
+            case "ProductId":
+                systemUnitData["ProductId"] = items.innerHTML;
+                break;
+            case "ProductPlatform":
+                systemUnitData["ProductPlatform"] = items.innerHTML;
+                break;
+            case "ProductType":
+                systemUnitData["ProductType"] = items.innerHTML;
+                break;
+            case "Software":
+                let softwareTemp = {
+                    optionKeys: {}
+                };
+                for(let innerElm of items.children){
+                    if(innerElm.tagName == "OptionKeys"){
+                        for(let innerElm2 of innerElm.children)
+                            softwareTemp.optionKeys[innerElm2.tagName] = innerElm2.innerHTML;
+                    }else softwareTemp[innerElm.tagName] = innerElm.innerHTML;
+                }
+                systemUnitData["software"] = softwareTemp;
+                break;
+            case "Diagnostics":
+                let diagTemp = {
+                    message:[]
+                }
+
+                for(let innerElm of items.children){
+                    if(innerElm.tagName =="Message"){
+                        let innerDiagTemp = {}
+                        for(let innerElm2 of innerElm.children){
+                            innerDiagTemp[innerElm2.tagName] = innerElm2.innerHTML;
+                        }
+                        diagTemp.message.push(innerDiagTemp);
+                        innerDiagTemp = {};
+                    }else diagTemp[innerElm.tagName] = innerElm.innerHTML;
+                }
+                systemUnitData["Diagnostics"] = diagTemp;
+                break;
+            case "State":
+                let temp = {}
+                for(let innerElm of items.children){
+                        temp[innerElm.tagName] = innerElm.innerHTML;
+                    }
+                    systemUnitData["state"] = temp;
+                break;
+            case "Uptime":
+                systemUnitData["Uptime"] = items.innerHTML;
+                break;
+            default:
+                break;
+        }
+    }
     return persistedData["systemUnit"] = systemUnit    
 }
 
