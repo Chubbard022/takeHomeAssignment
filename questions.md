@@ -12,3 +12,7 @@
         * Look inside the util folder
 * __Steps to deploy the solution__
     * Project is deployed on GitHub at --> chubbard022.github.io/takeHomeAssignmentIR
+
+
+* __Screen shot showing data persisting__
+    ![alt text](./images/screenshotDataPersist)
