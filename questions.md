@@ -12,7 +12,11 @@
         * Look inside the util folder
 * __Steps to deploy the solution__
     * Project is deployed on GitHub at --> chubbard022.github.io/takeHomeAssignmentIR
-
-
+* __highlighting any anomalies or errors__
+    * I found that only in the < Capabilities > tags errors that didn't align with the camera data. Within the persisted data, there is a key value pair for the data under     AnomaliesInCapabilities
 * __Screen shot showing data persisting__
     ![alt text](./images/screenshotDataPersist)
+* __Steps to deploy the solution__
+    1. call the backend to recieve the XML data
+    2. use the parser created to sort out the necissary data.
+    3. call parser function when the data is needed and easily grab the necissary data.

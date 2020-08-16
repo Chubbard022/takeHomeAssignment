@@ -1,3 +1,12 @@
-#parsedData{
-    border:1px solid red;
+
+#parsedData p{
+    border:1px solid #3B763C;
+    background-color: #DFF0D8;
+    border-radius: 3px;
+    color: #3B763C;
+    text-align: center;
+    width: 50%;
+    margin: 0 auto;
+    padding: 2%;
+    font-size: 20px;
 }
