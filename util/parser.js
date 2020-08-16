@@ -9,19 +9,25 @@ xhr.onreadystatechange = function(){
             window.setInterval(()=>{
             let persistedData = {}
 
+            //all helper functions grabbing specific data
             handleSystemUnitData(responseXML,persistedData)
             handlecameraDetails(responseXML,persistedData)
             handleNetworkDetails(responseXML,persistedData)
             handleSystemTime(responseXML,persistedData)
             handleContactInfo(responseXML,persistedData)
-            //output to DOM persisted data
+            handleAnomaliesInCapabilities(responseXML,persistedData)
+            
+            // if you look within the console on a window browser, the data persistance can be seen. 
+            // Also look inside questions.md for a screenshot of data persistance
             collection.push(persistedData)
             console.log(collection)
+
+            
             outputDOM(collection)
-            //console.log(persistedData)
+
             return collection
             }
-            ,6000)
+            ,60 * 1000)
         }
         if(xhr.status === 404){
             console.log("file not found")
@@ -32,15 +38,22 @@ xhr.onreadystatechange = function(){
 function handleSystemUnitData(responseData,persistedData){
     let systemUnitData = {};
     let systemUnit = responseData.getElementsByTagName("SystemUnit")[0]
-    console.log(systemUnit)
     for(let items of systemUnit.children){
         switch(items.tagName){
             case "Hardware":
-                console.log("Hardware",items.children) // ******************
                 for(let innerElm of items.children){
-                    console.log("Hardware",innerElm.innerHTML)
+                    if(innerElm.tagName == "Monitoring" || innerElm.tagName == "Module"){
+                        let monitorArr = []
+                        for(let innerElm2 of innerElm.children){
+                            if(innerElm2.tagName == "Fan"){
+                                monitorArr.push(innerElm2.children[0].innerHTML)
+                            }else{
+                                systemUnitData[innerElm2.tagName] = innerElm2.innerHTML;
+                            }
+                            systemUnitData["Monitoring"] = monitorArr;
+                        }
+                    }else systemUnitData[innerElm.tagName] = innerElm.innerHTML;
                 }
-               //console.log("Hardware",items.children.tagName, items.children.innerHTML)
                 break;
             case "ProductId":
                 systemUnitData["ProductId"] = items.innerHTML;
@@ -67,7 +80,6 @@ function handleSystemUnitData(responseData,persistedData){
                 let diagTemp = {
                     message:[]
                 }
-
                 for(let innerElm of items.children){
                     if(innerElm.tagName =="Message"){
                         let innerDiagTemp = {}
@@ -94,7 +106,7 @@ function handleSystemUnitData(responseData,persistedData){
                 break;
         }
     }
-    return persistedData["systemUnit"] = systemUnit    
+    return persistedData["systemUnit"] = systemUnitData    
 }
 
 function handlecameraDetails(responseData,persistedData){
@@ -185,6 +197,19 @@ function handleCapabilities(responseData,persistedData){
     //go through data
     //if capabilities are not in camera, add to list,
     //push into persistedData as outLires
+}
+
+function handleAnomaliesInCapabilities(responseData,persistedData){ 
+    let AnomalieCapabilitieData = []
+    let capabilities = responseData.getElementsByTagName("Capabilities")
+    for(innerElm of capabilities){
+        for(innerElm2 of innerElm.children){
+            if(innerElm.children[0].tagName !== "Options" || innerElm.children[0].tagName == undefined){
+                AnomalieCapabilitieData.push({[`${innerElm2.tagName}-capabilities`]: innerElm2.children})
+            }
+        }
+    }
+    return persistedData["AnomaliesInCapabilities"] = AnomalieCapabilitieData
 }
 
 function outputDOM(){
