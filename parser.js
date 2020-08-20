@@ -227,4 +227,3 @@ function outputDOM(){
 
 xhr.open("get", 'status.xml', true);
 xhr.send();
-
